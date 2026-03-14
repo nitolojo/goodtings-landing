@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>goodtings. — design your days.</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #0D0D0D; font-family: sans-serif; }
+        .bg-container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            background: url("goodtings-LP.jpg") center center / contain no-repeat #0D0D0D;
+        }
+        /* Invisible Clickable Areas */
+        .hotspot { position: absolute; background: transparent; cursor: pointer; text-decoration: none; }
+        
+        /* App Store Badge (Center) */
+        #appstore { top: 55%; left: 42%; width: 16%; height: 8%; }
+        
+        /* Footer: Privacy Policy (Left) */
+        #privacy { bottom: 6%; left: 23%; width: 10%; height: 4%; }
+        
+        /* Footer: Instagram (Right) */
+        #instagram { bottom: 6%; right: 23%; width: 8%; height: 4%; }
+
+        /* Footer: Email (Far Right) */
+        #email { bottom: 6%; right: 10%; width: 12%; height: 4%; }
+    </style>
+</head>
+<body>
+    <div class="bg-container">
+        <a href="https://apple.com/app/goodtings" target="_blank" class="hotspot" id="appstore"></a>
+        <a href="https://docs.google.com/document/u/1/d/e/2PACX-1vRRauOPFVnHDz8KY7VYvwc_n47UeFRjHeVaAZ4BhrWM8Y7l0diqE6m0440uT7jFL-97kg0XL1yDPf1U/pub" target="_blank" class="hotspot" id="privacy"></a>
+        <a href="https://instagram.com/goodtingsapp" target="_blank" class="hotspot" id="instagram"></a>
+        <a href="mailto:hello@goodtings.app" class="hotspot" id="email"></a>
+    </div>
+</body>
+</html>
