@@ -70,19 +70,6 @@
       color: var(--green);
     }
 
-    /* ── ambient grid (reacts to the cursor) ── */
-    .grid-bg {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      display: grid; grid-template-columns: repeat(var(--cols, 20), 1fr);
-      gap: 6px; padding: 6px; opacity: 0.6;
-    }
-    .grid-bg .cell {
-      border: 0.5px solid rgba(255,255,255,0.06); border-radius: 5px; aspect-ratio: 1 / 1.3;
-      transition: background-color 1.6s ease, border-color 1.6s ease;
-    }
-    .grid-bg .cell.accent { background: rgba(255,255,255,0.035); border-color: rgba(255,255,255,0.12); }
-    .grid-bg .cell.lit { background: rgba(74,237,128,0.14); border-color: rgba(74,237,128,0.35); transition-duration: .15s; }
-    .grid-bg .cell.lit.p { background: rgba(139,92,246,0.18); border-color: rgba(139,92,246,0.45); }
     main, footer { position: relative; z-index: 1; }
 
     /* ── nav: floating glass pill, same language as the app's tab bar ── */
@@ -97,7 +84,8 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
       backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
     }
-    .nav-logo { height: 30px; width: auto; }
+    .nav-logo { height: 30px; width: auto; transition: opacity .4s var(--ease), transform .4s var(--ease); }
+    .nav:not(.scrolled) .nav-logo { opacity: 0; transform: translateY(6px); }
     .nav-links { display: flex; gap: 4px; font-size: 14px; font-weight: 600; }
     .nav-links a { padding: 8px 14px; border-radius: 999px; color: var(--muted); transition: color .2s, background .2s; }
     .nav-links a:hover, .nav-links a.on { color: var(--ink); background: rgba(255,255,255,0.08); }
@@ -114,28 +102,48 @@
     .btn.lg { font-size: 17px; padding: 17px 30px; }
     .nav .btn { font-size: 14px; padding: 10px 16px; }
 
-    /* ── hero ── */
-    .hero { padding-top: calc(env(safe-area-inset-top, 0px) + 140px); padding-bottom: 72px; }
-    .hero-inner { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
-    .hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; min-width: 0; }
-    .hero h1 { font-size: clamp(48px, 7.2vw, 100px); }
+    /* ── hero: centered stack, big wordmark, the year as a showpiece below ── */
+    .hero { position: relative; padding-top: calc(env(safe-area-inset-top, 0px) + 150px); padding-bottom: 40px; overflow: hidden; }
+    .hero::before {
+      content: ""; position: absolute; left: 50%; top: 40px; width: min(1100px, 140vw); aspect-ratio: 2 / 1;
+      transform: translateX(-50%); pointer-events: none; z-index: -1;
+      background: radial-gradient(closest-side, rgba(74,237,128,0.16), rgba(74,237,128,0.04) 55%, transparent);
+    }
+    .hero-inner { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green);
+      background: rgba(74,237,128,0.08); border: 1px solid rgba(74,237,128,0.25);
+    }
+    .hero-logo {
+      height: clamp(110px, 17vw, 250px); width: auto;
+      filter: blur(0) drop-shadow(0 0 70px rgba(74,237,128,0.28));
+      animation: rise-logo 1.1s var(--ease) both;
+    }
+    .hero h1 { font-size: clamp(30px, 4.4vw, 58px); letter-spacing: -0.03em; line-height: 1.02; animation: rise 1.1s .12s var(--ease) both; }
+    .hero h1 .soft { color: var(--muted); }
     .hero h1 .g { color: var(--green); }
-    .hero-sub { font-size: clamp(17px, 1.6vw, 20px); color: var(--muted); max-width: 30em; line-height: 1.55; }
+    .hero-sub { font-size: clamp(17px, 1.5vw, 19px); color: var(--muted); max-width: 34em; line-height: 1.55; animation: rise 1.1s .22s var(--ease) both; }
     .hero-sub strong { color: var(--ink); font-weight: 700; }
-    .hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .hero .btn.lg { animation: rise 1.1s .32s var(--ease) both; }
+    @keyframes rise { from { transform: translateY(18px); filter: blur(6px); } }
+    @keyframes rise-logo { from { transform: translateY(24px) scale(.96); filter: blur(10px) drop-shadow(0 0 70px rgba(74,237,128,0.28)); } }
+
+    .showcase { perspective: 1400px; margin-top: clamp(56px, 8vw, 96px); }
+    .showcase .year { max-width: 920px; margin: 0 auto; transform-origin: 50% 100%; will-change: transform; }
 
     .year {
       position: relative; min-width: 0;
-      padding: clamp(18px, 2.4vw, 28px); border-radius: 32px;
-      background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
-      border: 1px solid var(--line);
-      box-shadow: 0 40px 120px rgba(74,237,128,0.08);
+      padding: clamp(18px, 3vw, 36px); border-radius: clamp(24px, 3vw, 40px);
+      background: linear-gradient(180deg, #1A1A1C, #121213);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 50px 120px -30px rgba(0,0,0,0.8), 0 0 140px -40px rgba(139,92,246,0.35);
     }
     .year-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 18px; }
     .year-head .date { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
     .year-head .count { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .year-head .count b { color: var(--purple); }
-    .tiles { display: grid; grid-template-columns: repeat(13, 1fr); gap: clamp(4px, .7vw, 8px); }
+    .tiles { display: grid; grid-template-columns: repeat(13, 1fr); gap: clamp(4px, .9vw, 10px); }
     .tile {
       position: relative; aspect-ratio: 1 / 1.25; border-radius: clamp(5px, .8vw, 9px);
       border: 1px solid rgba(255,255,255,0.12); background: transparent;
@@ -161,7 +169,7 @@
     .ticker {
       overflow: hidden; white-space: nowrap;
       background: linear-gradient(90deg, var(--purple), var(--indigo), var(--purple));
-      padding: 14px 0; transform: rotate(-1.2deg); margin: 24px -10px 0;
+      padding: 14px 0; transform: rotate(-1.2deg); margin: clamp(64px, 8vw, 104px) -10px 0;
       box-shadow: 0 20px 60px rgba(139,92,246,0.25);
     }
     .ticker-track { display: inline-flex; gap: 40px; animation: marquee 40s linear infinite; padding-right: 40px; }
@@ -216,7 +224,6 @@
     .try.big h2 .big-word { transform: scale(1.12) rotate(-3deg); }
     .try-copy p { font-size: 19px; line-height: 1.6; max-width: 28em; opacity: .85; }
     .try-counter { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .try-wordmark { position: absolute; right: -2vw; bottom: -4vw; width: 46vw; opacity: .12; pointer-events: none; }
 
     .rec {
       background: var(--card); color: var(--card-ink); border-radius: 32px;
@@ -331,8 +338,7 @@
     /* ── responsive ── */
     @media (max-width: 900px) {
       .nav-links { display: none; }
-      .hero { padding-top: calc(env(safe-area-inset-top, 0px) + 112px); }
-      .hero-inner { grid-template-columns: 1fr; }
+      .hero { padding-top: calc(env(safe-area-inset-top, 0px) + 116px); }
       .how-grid { grid-template-columns: 1fr; }
       .phone-col { display: none; }
       .step { min-height: 0; padding-block: 40px; }
@@ -341,8 +347,7 @@
       .try-inner { grid-template-columns: 1fr; }
       .story-inner { grid-template-columns: 1fr; }
       .wall-photo { position: static; max-width: 420px; }
-      .try-wordmark { width: 90vw; }
-    }
+      }
     @media (max-width: 520px) {
       .nav { padding-left: 16px; }
       .nav-logo { height: 26px; }
@@ -359,8 +364,6 @@
   </style>
 </head>
 <body>
-  <div class="grid-bg" id="gridBg" aria-hidden="true"></div>
-
   <nav class="nav" aria-label="main">
     <a href="#top" aria-label="goodtings. home"><img src="gootings-logo-header-white.svg" alt="goodtings." class="nav-logo" /></a>
     <div class="nav-links">
@@ -375,18 +378,17 @@
     <!-- HERO -->
     <section class="hero" id="top">
       <div class="container hero-inner">
-        <div class="hero-copy">
-          <div class="eyebrow">now on the App Store ✦</div>
-          <h1>design your days.<br>build your year<span class="g">.</span></h1>
-          <p class="hero-sub">a daily sanctuary for the moments that actually matter. <strong>capture three good things every day</strong> and watch your year come to life.</p>
-          <div class="hero-meta">
-            <a class="btn lg" href="https://apps.apple.com/es/app/goodtings/id6761063620?l=en-GB" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-              Download on the App Store
-            </a>
-          </div>
-        </div>
+        <div class="badge">now on the App Store ✦</div>
+        <img src="gootings-logo-header-white.svg" alt="goodtings." class="hero-logo" />
+        <h1>design your days. <span class="soft">build your year</span><span class="g">.</span></h1>
+        <p class="hero-sub">a daily sanctuary for the moments that actually matter. <strong>capture three good things every day</strong> and watch your year come to life.</p>
+        <a class="btn lg" href="https://apps.apple.com/es/app/goodtings/id6761063620?l=en-GB" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          Download on the App Store
+        </a>
+      </div>
 
+      <div class="container showcase">
         <div class="year" aria-label="an example year in goodtings, one tile per week">
           <div class="year-head">
             <span class="date" id="today">today</span>
@@ -457,7 +459,6 @@
 
     <!-- TRY IT -->
     <section class="try" id="try">
-      <img class="try-wordmark" src="gootings-logo-header-white.svg" alt="" aria-hidden="true" />
       <div class="container try-inner">
         <div class="try-copy">
           <div class="eyebrow">try it here</div>
@@ -517,8 +518,8 @@
             <p>same ritual. same belief. now in your pocket. capture your good things every day. raise your vibration. design the year you want to manifest.</p>
           </div>
           <figure class="wall-photo">
-            <img src="postits-wall.png" alt="a bedroom wall covered in yellow post-its, one good thing written on each" loading="lazy" />
-            <figcaption><span>the original wall</span><b>2021</b></figcaption>
+            <img src="postits-angled.jpg" alt="the original post-its, one good thing written on each" loading="lazy" />
+            <figcaption><span>the original post-its</span><b>2021</b></figcaption>
           </figure>
         </div>
       </div>
@@ -597,34 +598,16 @@
     const row = tings.map(t => `<span>${t}</span>`).join('');
     track.innerHTML = row + row;
 
-    // ── ambient grid, lights up under the cursor ──
-    const grid = $('#gridBg');
-    const buildGrid = () => {
-      const cols = innerWidth < 768 ? 10 : 20;
-      grid.style.setProperty('--cols', cols);
-      const cellW = innerWidth / cols;
-      const rows = Math.ceil(innerHeight / (cellW * 1.3)) + 1;
-      grid.innerHTML = '';
-      for (let i = 0; i < cols * rows; i++) {
-        const c = document.createElement('div');
-        c.className = 'cell' + (rnd() < 0.07 ? ' accent' : '');
-        grid.appendChild(c);
-      }
-      grid.dataset.cols = cols;
+    // ── nav logo appears once the big one scrolls away; year card flattens as it rises ──
+    const nav = $('.nav'), heroLogo = $('.hero-logo'), card = $('.showcase .year');
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', heroLogo.getBoundingClientRect().bottom < 70);
+      if (reduce) return;
+      const r = card.getBoundingClientRect();
+      const t = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75)));
+      card.style.transform = `rotateX(${(1 - t) * 22}deg) scale(${0.94 + t * 0.06})`;
     };
-    buildGrid();
-    let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(buildGrid, 200); });
-    if (!reduce && matchMedia('(hover: hover)').matches) {
-      let last = -1;
-      addEventListener('pointermove', e => {
-        const cols = +grid.dataset.cols, w = innerWidth / cols, h = w * 1.3;
-        const idx = Math.floor(e.clientY / h) * cols + Math.floor(e.clientX / w);
-        if (idx === last) return; last = idx;
-        const c = grid.children[idx]; if (!c) return;
-        c.classList.add('lit'); if (rnd() < 0.15) c.classList.add('p');
-        setTimeout(() => c.classList.remove('lit', 'p'), 500);
-      }, { passive: true });
-    }
+    onScroll(); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll);
 
     // ── nav: highlight current section ──
     const links = $$('.nav-links a');
