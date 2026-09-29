@@ -321,7 +321,7 @@
     }
     .yellow-note .sw { flex: none; width: 34px; height: 42px; border-radius: 9px; background: var(--yellow); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); position: relative; }
     .yellow-note p { font-size: 16px; line-height: 1.5; margin: 0; color: var(--wall-ink); }
-    .sign { font-family: var(--hand); font-size: 22px; color: var(--wall-ink); margin-top: 4px; }
+    .sign { width: clamp(220px, 26vw, 320px); height: auto; margin-top: 10px; margin-left: -6px; }
     .story .lede { font-size: clamp(22px, 2.2vw, 28px); line-height: 1.35; color: var(--wall-ink); font-weight: 600; letter-spacing: -0.01em; }
     .wall-photo { position: sticky; top: 100px; }
     .wall-photo img { width: 100%; border-radius: 6px; box-shadow: 0 40px 80px -30px rgba(0,0,0,0.35); }
@@ -329,13 +329,22 @@
     .wall-photo figcaption b { font-family: var(--hand); font-weight: 400; font-size: 18px; color: var(--wall-ink); }
 
     /* ── final CTA ── */
-    .final { padding-block: clamp(100px, 13vw, 180px); text-align: center; }
+    .final { position: relative; padding-top: clamp(110px, 14vw, 190px); text-align: center; overflow: hidden; }
+    .final::before {
+      content: ""; position: absolute; left: 50%; bottom: -10%; width: min(1000px, 150vw); aspect-ratio: 1.6;
+      transform: translateX(-50%); pointer-events: none;
+      background: radial-gradient(closest-side, rgba(74,237,128,0.22), rgba(139,92,246,0.08) 60%, transparent);
+    }
+    .final-phone { position: relative; height: clamp(260px, 34vw, 440px); overflow: hidden; margin-top: clamp(48px, 6vw, 72px); width: 100%; }
+    .final-phone img {
+      width: min(400px, 82vw); margin: 0 auto; will-change: transform;
+      filter: drop-shadow(0 -10px 60px rgba(0,0,0,0.5));
+    }
+    .final-phone::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(transparent, var(--bg)); }
     .final-inner { display: flex; flex-direction: column; align-items: center; gap: 28px; }
     .final h2 { font-size: clamp(52px, 8.4vw, 124px); }
     .final h2 .g { color: var(--green); }
     .final p { font-size: 20px; color: var(--muted); }
-    .strip { display: grid; grid-template-columns: repeat(26, 1fr); gap: 5px; width: min(640px, 100%); }
-    .strip .tile { border-radius: 4px; }
 
     footer { border-top: 1px solid var(--line); padding-block: 40px 32px; }
     .foot { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
@@ -362,7 +371,6 @@
       .nav { padding-left: 16px; }
       .nav-logo { height: 26px; }
       .tiles { grid-template-columns: repeat(10, 1fr); }
-      .strip { grid-template-columns: repeat(13, 1fr); }
       .rec { padding: 20px; border-radius: 26px; }
       .foot { flex-direction: column; text-align: center; }
       .ticker span { font-size: 15px; }
@@ -529,7 +537,7 @@
               <span class="sw" aria-hidden="true"></span>
               <p>that's why an unfinished week is yellow. every week starts as a post-it.</p>
             </div>
-            <div class="sign">laureano, founder</div>
+            <img class="sign" src="signature.svg" alt="laureano, founder" />
           </div>
           <figure class="wall-photo">
             <img src="postits-angled.jpg" alt="the original post-its, one good thing written on each" loading="lazy" />
@@ -542,7 +550,6 @@
     <!-- FINAL CTA -->
     <section class="final">
       <div class="container final-inner">
-        <div class="strip" id="strip" aria-hidden="true"></div>
         <h2>start designing<br>your year<span class="g">.</span></h2>
         <p>the good things deserve to be remembered.</p>
         <a class="btn lg" href="https://apps.apple.com/es/app/goodtings/id6761063620?l=en-GB" target="_blank" rel="noopener">
@@ -550,6 +557,7 @@
           Download on the App Store
         </a>
       </div>
+      <div class="final-phone" aria-hidden="true"><img id="finalPhone" src="goodting-as-02-8.png" alt="" loading="lazy" /></div>
     </section>
   </main>
 
@@ -733,17 +741,15 @@
       noteIO.observe(notes);
     }
 
-    // ── final strip: a year of tiles that fills when you reach it ──
-    const strip = $('#strip');
-    const sTiles = Array.from({ length: 52 }, () => { const t = document.createElement('div'); t.className = 'tile'; specks(t); strip.appendChild(t); return t; });
-    const fillStrip = () => sTiles.forEach((t, i) => {
-      const go = () => t.classList.add(i % 9 === 4 ? 'p' : i % 11 === 6 ? 'y' : 'g');
-      reduce ? go() : setTimeout(go, i * 30);
-    });
-    const stripIO = new IntersectionObserver(es => {
-      if (es[0].isIntersecting) { fillStrip(); stripIO.disconnect(); }
-    }, { threshold: 0.6 });
-    stripIO.observe(strip);
+    // ── final: the phone rises as you reach the end ──
+    const fp = $('#finalPhone');
+    const rise = () => {
+      if (reduce) return;
+      const r = fp.parentElement.getBoundingClientRect();
+      const t = Math.min(1, Math.max(0, (innerHeight - r.top) / r.height));
+      fp.style.transform = `translateY(${((1 - t) * 90).toFixed(1)}px)`;
+    };
+    rise(); addEventListener('scroll', rise, { passive: true });
   })();
   </script>
 </body>
