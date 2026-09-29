@@ -129,48 +129,58 @@
     @keyframes rise-logo { from { transform: translateY(24px) scale(.96); filter: blur(10px) drop-shadow(0 0 70px rgba(74,237,128,0.28)); } }
 
     .showcase { perspective: 1400px; margin-top: clamp(56px, 8vw, 96px); }
-    .showcase .year { max-width: 400px; margin: 0 auto; transform-origin: 50% 100%; will-change: transform; }
+    .showcase .year { margin: 0 auto; transform-origin: 50% 100%; will-change: transform; }
 
-    /* the card is a slice of the app: white, app-scale, pastel tiles */
+    /* the card is a 1:1 slice of the app's home screen, drawn in iPhone points (--u = 1pt) */
     .year {
-      --t-g: #7DEFA3; --t-y: #FEFEBE; --t-p: #C28FEB; --t-empty: #EDEEF1;
-      position: relative; min-width: 0;
-      padding: 30px 26px 24px; border-radius: 40px;
+      --u: 1.3px;
+      --t-g: #7DF0A2; --t-g-b: #75D696;
+      --t-y: #FDFDBF; --t-y-b: #E6E7AE;
+      --t-p: #C191EA; --t-p-b: #B284D2;
+      --t-empty: #ECEDF0;
+      position: relative; min-width: 0; width: calc(var(--u) * 390); max-width: 100%;
+      padding: calc(var(--u) * 36) calc(var(--u) * 28) calc(var(--u) * 24);
+      border-radius: calc(var(--u) * 48);
       background: #FFFFFF; color: #111;
-      box-shadow: 0 60px 120px -40px rgba(0,0,0,0.9), 0 0 160px -30px rgba(74,237,128,0.35);
-      display: flex; flex-direction: column; align-items: center; gap: 0;
+      box-shadow: 0 60px 120px -40px rgba(0,0,0,0.9), 0 0 160px -30px rgba(74,237,128,0.3);
+      display: flex; flex-direction: column; align-items: center;
     }
-    .year-mark { height: 34px; width: auto; filter: invert(1); }
-    .year .date { margin-top: 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #9A9AA0; }
-    .tiles { width: 100%; display: grid; grid-template-columns: repeat(10, 1fr); gap: 7px; margin-top: 22px; }
+    .year-top { position: relative; width: 100%; display: flex; justify-content: center; }
+    .year-mark { width: calc(var(--u) * 174); height: auto; margin: calc(var(--u) * -34.4) 0 calc(var(--u) * -26.6); filter: invert(1); }
+    .year-bell { position: absolute; right: calc(var(--u) * 5); top: 50%; transform: translateY(-58%); width: calc(var(--u) * 20); height: auto; color: #111; }
+    .year .date {
+      margin-top: calc(var(--u) * 16); font-size: calc(var(--u) * 13.5); font-weight: 500;
+      letter-spacing: 0.26em; text-transform: uppercase; color: #A1A5AE; white-space: nowrap;
+    }
+    .tiles {
+      width: 100%; display: grid; grid-template-columns: repeat(10, 1fr);
+      gap: calc(var(--u) * 5); margin-top: calc(var(--u) * 29);
+      -webkit-mask-image: linear-gradient(#000 62%, transparent 100%); mask-image: linear-gradient(#000 62%, transparent 100%);
+    }
     .tile {
-      position: relative; aspect-ratio: 1 / 1.3; border-radius: 7px;
-      border: 1.5px solid var(--t-empty); background: #fff;
-      transition: background-color .5s var(--ease), border-color .5s var(--ease), transform .5s var(--ease);
+      position: relative; aspect-ratio: 28 / 45; border-radius: calc(var(--u) * 6);
+      border: 1px solid var(--t-empty); background: #fff; overflow: visible;
+      transition: background-color .5s var(--ease), border-color .5s var(--ease), box-shadow .5s var(--ease);
     }
-    .tile.g { background: var(--t-g); border-color: var(--t-g); box-shadow: 0 3px 10px -2px rgba(125,239,163,0.55); }
-    .tile.y { background: var(--t-y); border-color: #F4F2A6; box-shadow: 0 3px 10px -2px rgba(240,236,140,0.6); }
-    .tile.p { background: var(--t-p); border-color: var(--t-p); box-shadow: 0 3px 10px -2px rgba(194,143,235,0.6); }
+    .tile.g { background: var(--t-g); border-color: var(--t-g-b); box-shadow: 0 0 calc(var(--u) * 14) rgba(125,240,162,0.45); }
+    .tile.y { background: var(--t-y); border-color: var(--t-y-b); box-shadow: 0 0 calc(var(--u) * 14) rgba(246,246,160,0.55); }
+    .tile.p { background: var(--t-p); border-color: var(--t-p-b); box-shadow: 0 0 calc(var(--u) * 14) rgba(193,145,234,0.5); }
     .tile.g, .tile.y, .tile.p { animation: pop .5s var(--ease); }
-    .speck {
-      position: absolute; border-radius: 50%; background: #fff; pointer-events: none;
-      opacity: 0; transition: opacity .6s ease;
-    }
-    .tile.g .speck, .tile.p .speck, .tile.y .speck { opacity: var(--o, .8); animation: speck 3.2s ease-in-out infinite; animation-delay: var(--dl, 0s); }
-    @keyframes speck { 50% { opacity: calc(var(--o, .8) * .35); } }
+    .speck { position: absolute; background: #fff; pointer-events: none; opacity: 0; transition: opacity .6s ease; border-radius: 50%; }
+    .speck.star { border-radius: 0; clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%); }
+    .tile.y .speck { background: #E9E48F; }
+    .tile.g .speck, .tile.p .speck, .tile.y .speck { opacity: var(--o, .85); animation: speck 3.4s ease-in-out infinite; animation-delay: var(--dl, 0s); }
+    @keyframes speck { 50% { opacity: calc(var(--o, .85) * .3); } }
     .tile.now.y { animation: pop .5s var(--ease), breathe 2.6s 1s ease-in-out infinite; }
     @keyframes pop { 0% { transform: scale(.6); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
-    @keyframes breathe { 50% { transform: scale(1.06); box-shadow: 0 6px 16px -2px rgba(240,236,140,0.9); } }
-    .year-pill {
-      margin-top: 22px; display: inline-flex; align-items: center; gap: 8px;
-      padding: 9px 16px; border-radius: 999px; background: #F4F4F6;
-      font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: #111;
-    }
-    .year-pill b { color: #8B5CF6; }
-    .year-foot { display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 22px; font-size: 12px; color: var(--muted); }
+    @keyframes breathe { 50% { box-shadow: 0 0 calc(var(--u) * 22) rgba(246,246,150,0.95); } }
+    .year-foot { display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 26px; font-size: 12px; color: var(--muted); }
+    .year-foot b { color: var(--ink); font-variant-numeric: tabular-nums; }
+    .year-foot b span { color: #C191EA; }
     .legend { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-    .legend i { display: inline-block; width: 9px; height: 12px; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
-    .year-note { font-size: 12px; color: var(--muted); opacity: .7; }
+    .legend i { display: inline-block; width: 9px; height: 13px; border-radius: 3px; margin-right: 7px; vertical-align: -2px; }
+    .year-note { opacity: .7; }
+    @media (max-width: 560px) { .year { --u: calc((100vw - 32px) / 390); } }
 
     /* ── pulse ticker ── */
     .ticker {
@@ -412,18 +422,21 @@
 
       <div class="container showcase">
         <div class="year" aria-label="an example year in goodtings, one tile per week">
-          <img class="year-mark" src="gootings-logo-header-white.svg" alt="" />
+          <div class="year-top">
+            <img class="year-mark" src="gootings-logo-header-white.svg" alt="" />
+            <svg class="year-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg>
+          </div>
           <span class="date" id="today">today</span>
           <div class="tiles" id="tiles"></div>
-          <span class="year-pill"><b id="bigCount">0</b>/52 big tings</span>
         </div>
         <div class="year-foot">
+          <b><span id="bigCount">0</span>/52 big tings</b>
           <div class="legend">
-            <span><i style="background:#7DEFA3"></i>complete week</span>
-            <span><i style="background:#FEFEBE"></i>still filling</span>
-            <span><i style="background:#C28FEB"></i>big ting week</span>
+            <span><i style="background:#7DF0A2"></i>complete week</span>
+            <span><i style="background:#FDFDBF"></i>still filling</span>
+            <span><i style="background:#C191EA"></i>big ting week</span>
           </div>
-          <span class="year-note">· an example year</span>
+          <span class="year-note">an example year</span>
         </div>
       </div>
 
@@ -599,13 +612,14 @@
 
     // ── hero year grid: fills up to this week ──
     const tilesEl = $('#tiles');
-    const plan = Array.from({ length: 52 }, (_, i) => (i < week - 1 ? kindFor() : i === week - 1 ? 'y' : null));
+    const plan = Array.from({ length: 60 }, (_, i) => (i < week - 1 ? kindFor() : i === week - 1 ? 'y' : null));
     const specks = t => {
       const n = 3 + Math.floor(rnd() * 4);
       for (let k = 0; k < n; k++) {
-        const d = document.createElement('i'); d.className = 'speck';
-        const z = (1.2 + rnd() * 1.6).toFixed(1);
-        d.style.cssText = `width:${z}px;height:${z}px;left:${(12 + rnd() * 72).toFixed(0)}%;top:${(10 + rnd() * 76).toFixed(0)}%;--o:${(.45 + rnd() * .5).toFixed(2)};--dl:${(rnd() * 3).toFixed(2)}s`;
+        const d = document.createElement('i'), star = rnd() < 0.35;
+        d.className = 'speck' + (star ? ' star' : '');
+        const z = star ? 4 + rnd() * 3 : 1.4 + rnd() * 1.4;
+        d.style.cssText = `width:calc(var(--u) * ${z.toFixed(1)});height:calc(var(--u) * ${z.toFixed(1)});left:${(12 + rnd() * 68).toFixed(0)}%;top:${(8 + rnd() * 80).toFixed(0)}%;--o:${(.55 + rnd() * .4).toFixed(2)};--dl:${(rnd() * 3).toFixed(2)}s`;
         t.appendChild(d);
       }
     };
