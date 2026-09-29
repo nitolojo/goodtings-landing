@@ -139,7 +139,7 @@
       --t-p: #C191EA; --t-p-b: #B284D2;
       --t-empty: #ECEDF0;
       position: relative; min-width: 0; width: calc(var(--u) * 390); max-width: 100%;
-      padding: calc(var(--u) * 36) calc(var(--u) * 28) calc(var(--u) * 24);
+      padding: calc(var(--u) * 58) calc(var(--u) * 28) calc(var(--u) * 24);
       border-radius: calc(var(--u) * 48);
       background: #FFFFFF; color: #111;
       box-shadow: 0 60px 120px -40px rgba(0,0,0,0.9), 0 0 160px -30px rgba(74,237,128,0.3);
@@ -147,7 +147,6 @@
     }
     .year-top { position: relative; width: 100%; display: flex; justify-content: center; }
     .year-mark { width: calc(var(--u) * 174); height: auto; margin: calc(var(--u) * -34.4) 0 calc(var(--u) * -26.6); filter: invert(1); }
-    .year-bell { position: absolute; right: calc(var(--u) * 5); top: 50%; transform: translateY(-58%); width: calc(var(--u) * 20); height: auto; color: #111; }
     .year .date {
       margin-top: calc(var(--u) * 16); font-size: calc(var(--u) * 13.5); font-weight: 500;
       letter-spacing: 0.26em; text-transform: uppercase; color: #A1A5AE; white-space: nowrap;
@@ -424,7 +423,6 @@
         <div class="year" aria-label="an example year in goodtings, one tile per week">
           <div class="year-top">
             <img class="year-mark" src="gootings-logo-header-white.svg" alt="" />
-            <svg class="year-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg>
           </div>
           <span class="date" id="today">today</span>
           <div class="tiles" id="tiles"></div>
