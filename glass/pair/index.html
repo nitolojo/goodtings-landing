@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>pair your glasses · goodtings.</title>
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <style>
+    @font-face { font-family: "Figtree"; font-weight: 500; src: url("../assets/fonts/figtree-latin-500-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Figtree"; font-weight: 700; src: url("../assets/fonts/figtree-latin-700-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Figtree"; font-weight: 800; src: url("../assets/fonts/figtree-latin-800-normal.woff2") format("woff2"); }
+    :root { --green: #4AED80; --purple: #8B5CF6; --ink: #0D0D0D; --muted: #6B6B73; --line: #E8E8EC; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; min-height: 100dvh;
+      font-family: "Figtree", system-ui, sans-serif; color: var(--ink);
+      background: linear-gradient(180deg, #fff 0%, #fff 45%, #E3FBEB 80%, #EFE9FF 100%);
+      display: grid; place-items: center; padding: 24px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    main { width: 100%; max-width: 380px; display: grid; gap: 22px; text-align: center; }
+    .logo { height: 40px; margin: 0 auto; display: block; }
+    h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+    h1 em { font-style: normal; color: var(--purple); }
+    p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+    .card { background: #fff; border-radius: 24px; padding: 22px; box-shadow: 0 10px 40px rgba(13,13,13,.08); display: grid; gap: 12px; text-align: left; }
+    .btn { appearance: none; border: 0; border-radius: 999px; padding: 15px 18px; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+    .btn.dark { background: var(--ink); color: #fff; }
+    .btn.light { background: #F4F4F6; color: var(--ink); }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .btn svg { width: 18px; height: 18px; }
+    .or { text-align: center; color: var(--muted); font-size: 13px; }
+    input { font: inherit; font-size: 16px; padding: 14px 16px; border-radius: 14px; border: 1.5px solid var(--line); width: 100%; background: #FAFAFB; }
+    input:focus { outline: none; border-color: var(--green); background: #fff; }
+    .code { font-size: 34px; font-weight: 800; letter-spacing: .32em; text-align: center; padding: 16px 8px 16px 20px; font-variant-numeric: tabular-nums; }
+    .msg { font-size: 14px; text-align: center; min-height: 20px; color: var(--muted); }
+    .msg.err { color: #D92D4B; }
+    .who { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--muted); }
+    .link { background: none; border: 0; color: var(--purple); font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; padding: 0; }
+    .done { font-size: 56px; line-height: 1; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="../assets/wordmark-dark.svg" alt="goodtings.">
+
+    <!-- 1 · sign in -->
+    <section id="signin" hidden>
+      <div style="display:grid;gap:10px;margin-bottom:22px">
+        <h1>pair your <em>glasses</em></h1>
+        <p>sign in with the same account you use in the goodtings. app.</p>
+      </div>
+      <div class="card">
+        <button class="btn dark" id="apple"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.7-4.1zM13.9 4.9c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>continue with Apple</button>
+        <button class="btn light" id="google"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.8h3.6c2.1-1.9 3.2-4.8 3.2-8.1z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.8c-1 .7-2.2 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.9A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.8 14.1a6.6 6.6 0 0 1 0-4.2V7H2.1a11 11 0 0 0 0 9.9l3.7-2.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2A11 11 0 0 0 2.1 7l3.7 2.9C6.7 7.3 9.1 5.4 12 5.4z"/></svg>continue with Google</button>
+        <div class="or">or with email</div>
+        <form id="emailForm" style="display:grid;gap:10px">
+          <input type="email" id="email" placeholder="email" autocomplete="email" required>
+          <input type="password" id="password" placeholder="password" autocomplete="current-password" required>
+          <button class="btn light" type="submit">sign in</button>
+        </form>
+        <div class="msg" id="signinMsg"></div>
+      </div>
+    </section>
+
+    <!-- 2 · enter code -->
+    <section id="enter" hidden>
+      <div style="display:grid;gap:10px;margin-bottom:22px">
+        <h1>enter the <em>code</em></h1>
+        <p>open goodtings. on your Ray-Ban Display glasses. you’ll see 6 digits.</p>
+      </div>
+      <form class="card" id="codeForm">
+        <input class="code" id="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="······" autocomplete="one-time-code" required>
+        <button class="btn dark" type="submit" id="pairBtn">pair glasses →</button>
+        <div class="msg" id="codeMsg"></div>
+        <div class="who"><span id="whoami"></span><button type="button" class="link" id="signout">not you?</button></div>
+      </form>
+    </section>
+
+    <!-- 3 · done -->
+    <section id="done" hidden>
+      <div class="card" style="text-align:center;justify-items:center;gap:14px">
+        <div class="done">💚</div>
+        <h1>you’re <em>paired</em></h1>
+        <p>look up. your tings and the pulse are on your glasses now.</p>
+        <button class="btn light" id="another" style="margin-top:6px">pair another pair</button>
+      </div>
+    </section>
+
+    <section id="loading"><p>loading…</p></section>
+  </main>
+  <script type="module" src="pair.js"></script>
+</body>
+</html>

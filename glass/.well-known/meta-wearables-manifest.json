@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "goodtings.",
+  "description": "collect the good. capture your daily tings, read your affirmation and manifest your BIG tings, right from your glasses.",
+  "appearance": {
+    "theme_color": "#4AED80",
+    "icon": {
+      "src": "../assets/icon.svg",
+      "type": "monochrome"
+    },
+    "icon_background": {
+      "colors": ["#1E1E22", "#0D0D0D"],
+      "stops": [0.0, 1.0],
+      "inner_glow_color": "#4AED80"
+    }
+  }
+}
