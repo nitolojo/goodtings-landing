@@ -392,6 +392,33 @@
       *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
       html { scroll-behavior: auto; }
     }
+  
+    /* ---------- goodtings. on Meta Ray-Ban Display ---------- */
+    .glasses { padding-block: clamp(90px, 11vw, 150px); position: relative; overflow: hidden; }
+    .glasses::before { content: ""; position: absolute; inset: auto -20% -40% -20%; height: 70%;
+      background: radial-gradient(50% 60% at 50% 100%, rgba(74,237,128,.16), transparent 70%); pointer-events: none; }
+    .glasses-inner { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px, 6vw, 90px); align-items: center; position: relative; }
+    .glasses h2 { font-size: clamp(44px, 6vw, 84px); margin: 10px 0 18px; }
+    .glasses h2 .g { color: var(--green); }
+    .glasses p { font-size: 19px; line-height: 1.65; color: var(--muted); max-width: 30em; }
+    .glasses p strong { color: var(--ink); }
+    .glasses .pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 99px;
+      border: 1px solid rgba(74,237,128,.4); color: var(--green); font-size: 13px; font-weight: 800; letter-spacing: .04em; }
+    .lens { position: relative; aspect-ratio: 1; border-radius: 34px; overflow: hidden; background: #000;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 30px 90px rgba(0,0,0,.6), 0 0 120px rgba(74,237,128,.12); }
+    .lens img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lens::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      background: radial-gradient(120% 80% at 30% 0%, rgba(255,255,255,.09), transparent 55%); }
+    .get-glass { margin-top: 30px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+    .qr { width: 132px; height: 132px; padding: 10px; border-radius: 18px; background: #fff; flex: none; }
+    .qr img { width: 100%; height: 100%; display: block; }
+    .get-glass small { display: block; color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 19em; }
+    .get-glass small b { color: var(--ink); }
+    #installGlass[hidden] { display: none; }
+    @media (max-width: 860px) {
+      .glasses-inner { grid-template-columns: 1fr; }
+      .lens { max-width: 440px; margin-inline: auto; width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -565,6 +592,23 @@
             <figcaption><span>the original post-its</span><b>2021</b></figcaption>
           </figure>
         </div>
+      </div>
+    </section>
+
+    <!-- GLASSES -->
+    <section class="glasses" id="glasses">
+      <div class="container glasses-inner">
+        <div>
+          <span class="pill">new · Meta Ray-Ban Display</span>
+          <h2>good tings,<br>right in front of you<span class="g">.</span></h2>
+          <p>today’s three and the pulse from your squad, floating in your glasses. capture a ting by voice, tick your daily affirmation, manifest a <strong>BIG</strong> ting the moment it happens. all synced with the app.</p>
+          <div class="get-glass">
+            <div class="qr"><img src="glass-qr.svg" alt="QR code to add goodtings. to Meta Ray-Ban Display" /></div>
+            <small><b>look at this code with your glasses</b> to add goodtings. then open it and pair it with your phone in seconds.</small>
+          </div>
+          <a class="btn lg" id="installGlass" href="glass/" hidden style="margin-top:26px">add goodtings. to my glasses</a>
+        </div>
+        <div class="lens"><img src="glass-preview.jpg" alt="goodtings. on Meta Ray-Ban Display: today’s three tings, the daily affirmation and the pulse" loading="lazy" /></div>
       </div>
     </section>
 
@@ -773,6 +817,18 @@
     };
     rise(); addEventListener('scroll', rise, { passive: true });
   })();
-  </script>
+  
+  // on the glasses themselves: offer a one-tap install
+  (() => {
+    const btn = document.getElementById('installGlass');
+    if (!btn || !navigator.install) return;
+    btn.hidden = false;
+    btn.addEventListener('click', async e => {
+      e.preventDefault();
+      try { await navigator.install('https://goodtings.app/glass/', { name: 'goodtings.' }); }
+      catch (_) { location.href = 'glass/'; }
+    });
+  })();
+</script>
 </body>
 </html>

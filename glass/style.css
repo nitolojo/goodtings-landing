@@ -361,3 +361,46 @@ html:focus, body:focus, .view:focus, .view:focus-visible { outline: none; }
 /* capture sheet note */
 .note { margin: -.1rem .2rem 0; font-size: .68rem; font-weight: 600; line-height: 1.45; color: rgba(255, 255, 255, .62); text-align: center; }
 .sheet { gap: .75rem; }
+
+/* ---------- daily affirmation (glass card under today's three) ---------- */
+.affirm {
+  margin-block-start: .9rem;
+  padding: .8rem .95rem .85rem;
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, .07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 0 0 1px rgba(255, 255, 255, .12);
+  display: grid; gap: .55rem;
+}
+.affirm .label-row { margin: 0; }
+.affirm.done { background: rgba(74, 237, 128, .1); box-shadow: inset 0 1px 0 rgba(74, 237, 128, .5), inset 0 0 0 1px rgba(74, 237, 128, .35); }
+.affirm-text { margin: 0; font-size: .92rem; font-weight: 700; line-height: 1.3; }
+.affirm-row { display: flex; gap: .6rem; align-items: center; }
+.tick {
+  inline-size: 2.2rem; block-size: 2.2rem; padding: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .45);
+  background: transparent;
+  display: grid; place-items: center;
+  transition: transform .18s ease, background-color .18s;
+}
+.tick svg { inline-size: 1.1rem; block-size: 1.1rem; fill: none; stroke: #000; stroke-width: 3.2; opacity: 0; }
+.tick.on { background: var(--green); border-color: var(--green); box-shadow: 0 0 .8rem rgba(74, 237, 128, .45); }
+.tick.on svg { opacity: 1; }
+.tick.listen { margin-inline-start: auto; border-color: rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .08); }
+.tick.listen svg { opacity: 1; stroke: #fff; stroke-width: 2; fill: none; inline-size: 1.2rem; block-size: 1.2rem; }
+.tick:focus-visible { outline: 3px solid #fff; outline-offset: 3px; transform: scale(1.08); }
+
+/* ---------- BIG ting picker ---------- */
+.choices { display: grid; gap: .45rem; }
+.choices .label { margin: .1rem .2rem; }
+.choice {
+  text-align: start;
+  padding: .6rem .85rem;
+  border-radius: .85rem;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .06);
+  font-size: .8rem; font-weight: 700;
+}
+.choice[aria-pressed="true"] { background: rgba(139, 92, 246, .3); border-color: var(--purple-light); }
+.choice[aria-pressed="true"]::before { content: "✓ "; color: var(--purple-light); }
+.choice:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
