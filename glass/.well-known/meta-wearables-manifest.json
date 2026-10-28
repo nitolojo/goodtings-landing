@@ -3,20 +3,21 @@
   "name": "goodtings.",
   "description": "collect the good. your three daily tings and the pulse, right on your glasses.",
   "appearance": {
-    "theme_color": "#000000",
+    "theme_color": "#4AED80",
     "icon": {
-      "src": "../assets/icon.svg",
+      "src": "../assets/icon.png",
       "type": "monochrome"
     },
     "icon_background": {
       "colors": [
-        "#1A1A1A",
+        "#111111",
         "#000000"
       ],
       "stops": [
         0.0,
         1.0
-      ]
+      ],
+      "inner_glow_color": "#4AED80"
     }
   }
 }
