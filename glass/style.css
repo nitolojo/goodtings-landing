@@ -78,8 +78,8 @@ button { cursor: pointer; }
 .slot {
   aspect-ratio: 4 / 5;
   border-radius: var(--r);
-  border: 1.5px dashed var(--faint);
-  background: transparent center / cover no-repeat;
+  border: 2px solid rgba(255, 255, 255, .42);
+  background: rgba(255, 255, 255, .05) center / cover no-repeat;
   display: grid;
   place-items: center;
   padding: 0;
@@ -88,7 +88,7 @@ button { cursor: pointer; }
   transition: transform .18s ease;
 }
 .slot:focus-visible { transform: scale(1.04); }
-.slot .plus { font-size: 1.7rem; font-weight: 500; line-height: 1; color: var(--muted); }
+.slot .plus { font-size: 2rem; font-weight: 500; line-height: 1; color: rgba(255, 255, 255, .8); }
 .slot.photo { border: 0; }
 .slot.text {
   border: 1.5px solid rgba(74, 237, 128, .7);
@@ -109,7 +109,7 @@ button { cursor: pointer; }
 }
 
 /* ---------- the pulse ---------- */
-.pulse { margin-block-start: 1.7rem; display: grid; gap: .9rem; }
+.pulse { margin-block-start: 1.7rem; display: grid; gap: 1rem; }
 .pulse .label-row { margin-block-end: 0; }
 
 .post {
@@ -119,7 +119,10 @@ button { cursor: pointer; }
   border-radius: 1.1rem;
   overflow: hidden;
   position: relative;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 1 / 1;
+  /* square, and always fully visible: one press = one post */
+  inline-size: min(100%, calc(100vh - 6.5rem));
+  justify-self: center;
   background: #111 center / cover no-repeat;
   text-align: start;
   display: block;
@@ -129,30 +132,36 @@ button { cursor: pointer; }
   position: absolute; inset: 45% 0 0;
   background: linear-gradient(transparent, rgba(0, 0, 0, .82));
 }
-.post.textonly { aspect-ratio: auto; background: var(--glass); border: 1px solid var(--line); }
+.post.textonly { aspect-ratio: auto; inline-size: 100%; background: var(--glass); border: 1px solid var(--line); min-block-size: 6rem; }
 .post.textonly::after { display: none; }
 .post-body {
   position: absolute; inset-inline: 0; inset-block-end: 0; z-index: 1;
   padding: .8rem .9rem;
   display: grid; gap: .35rem;
 }
-.post.textonly .post-body { position: static; }
-.who { display: flex; align-items: center; gap: .5rem; font-size: .62rem; font-weight: 700; }
+.post.textonly .post-body { position: static; padding-inline-end: 5.5rem; }
+.who { display: flex; align-items: center; gap: .55rem; font-size: .72rem; font-weight: 700; }
 .who .avatar {
-  inline-size: 1.25rem; block-size: 1.25rem; border-radius: 50%;
+  inline-size: 1.6rem; block-size: 1.6rem; border-radius: 50%; flex-shrink: 0;
   display: grid; place-items: center;
   font-size: .55rem; font-weight: 800; color: #000;
 }
 .who .where { color: var(--muted); font-weight: 600; }
-.post .cap { font-size: .82rem; font-weight: 700; line-height: 1.25; margin: 0; padding-inline-end: 3rem; }
+.post .cap { font-size: .92rem; font-weight: 700; line-height: 1.25; margin: 0; padding-inline-end: 4.6rem; }
 .likes {
   position: absolute; z-index: 1;
-  inset-inline-end: .8rem; inset-block-end: .8rem;
-  display: flex; align-items: center; gap: .25rem;
-  font-size: .62rem; font-weight: 800;
+  inset-inline-end: .75rem; inset-block-end: .75rem;
+  display: flex; align-items: center; gap: .35rem;
+  padding: .4rem .7rem .4rem .55rem;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, .55);
+  font-size: .95rem; font-weight: 800;
 }
-.likes svg { inline-size: 1.05rem; block-size: 1.05rem; fill: none; stroke: #fff; stroke-width: 2; }
+.likes svg { inline-size: 1.55rem; block-size: 1.55rem; fill: none; stroke: #fff; stroke-width: 2; }
+.post.liked .likes { background: rgba(255, 90, 110, .22); }
 .post.liked .likes svg { fill: var(--heart); stroke: var(--heart); }
+@keyframes pop { 40% { transform: scale(1.35); } }
+.post.pop .likes svg { animation: pop .32s ease; }
 .post:focus-visible { outline-offset: 3px; }
 
 .caught-up { text-align: center; color: var(--muted); font-size: .65rem; font-weight: 600; margin-block-start: .4rem; }
@@ -273,3 +282,16 @@ button { cursor: pointer; }
   color: var(--muted);
   font-size: .6rem; font-weight: 600;
 }
+
+/* ---------- add a photo (capture sheet) ---------- */
+.photo-row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.photo-row button {
+  padding: .65rem .8rem; border-radius: .85rem;
+  border: 1px solid var(--line); background: var(--glass);
+  font-size: .78rem; font-weight: 700;
+}
+.preview { border-radius: .85rem; aspect-ratio: 1 / 1; inline-size: 7rem; background: #111 center / cover no-repeat; justify-self: start; }
+.cam { position: fixed; inset: 0; background: #000; display: grid; place-items: center; z-index: 5; }
+.cam video { max-inline-size: 100%; max-block-size: 100%; border-radius: 1rem; }
+.cam button { position: absolute; inset-block-end: 1.2rem; }
+.file-input { position: absolute; inline-size: 1px; block-size: 1px; opacity: 0; pointer-events: none; }
