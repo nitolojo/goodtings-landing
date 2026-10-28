@@ -108,61 +108,76 @@ button { cursor: pointer; }
   background: var(--purple); color: #fff;
 }
 
-/* ---------- the pulse ---------- */
-.pulse { margin-block-start: 1.7rem; display: grid; gap: 1rem; }
+/* ---------- the pulse (Threads-style frosted cards) ---------- */
+.pulse { margin-block-start: 1.7rem; display: grid; gap: .9rem; }
 .pulse .label-row { margin-block-end: 0; }
 
 .post {
-  inline-size: 100%;
-  padding: 0;
-  border: 0;
-  border-radius: 1.1rem;
-  overflow: hidden;
-  position: relative;
-  aspect-ratio: 1 / 1;
-  /* square, and always fully visible: one press = one post */
-  inline-size: min(100%, calc(100vh - 6.5rem));
+  /* whole card fits on the display: header + square photo + actions */
+  inline-size: min(100%, calc(100vh - 8.4rem));
   justify-self: center;
-  background: #111 center / cover no-repeat;
+  display: grid;
+  gap: .55rem;
+  padding: .8rem .85rem .7rem;
+  border-radius: 1.3rem;
+  border: 1px solid rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, .1);
   text-align: start;
-  display: block;
 }
-.post::after {
-  content: "";
-  position: absolute; inset: 45% 0 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, .82));
-}
-.post.textonly { aspect-ratio: auto; inline-size: 100%; background: var(--glass); border: 1px solid var(--line); min-block-size: 6rem; }
-.post.textonly::after { display: none; }
-.post-body {
-  position: absolute; inset-inline: 0; inset-block-end: 0; z-index: 1;
-  padding: .8rem .9rem;
-  display: grid; gap: .35rem;
-}
-.post.textonly .post-body { position: static; padding-inline-end: 5.5rem; }
-.who { display: flex; align-items: center; gap: .55rem; font-size: .72rem; font-weight: 700; }
+.post.textonly { inline-size: 100%; }
+.post:focus-visible { outline: 3px solid #fff; outline-offset: 3px; background: rgba(255, 255, 255, .14); }
+.who { display: flex; align-items: center; gap: .5rem; font-size: .74rem; min-inline-size: 0; }
+.who b { font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.who .where { color: var(--muted); font-weight: 600; flex-shrink: 0; }
 .who .avatar {
   inline-size: 1.6rem; block-size: 1.6rem; border-radius: 50%; flex-shrink: 0;
   display: grid; place-items: center;
-  font-size: .55rem; font-weight: 800; color: #000;
+  background-size: cover; background-position: center;
+  font-size: .62rem; font-weight: 800; color: #000;
 }
-.who .where { color: var(--muted); font-weight: 600; }
-.post .cap { font-size: .92rem; font-weight: 700; line-height: 1.25; margin: 0; padding-inline-end: 4.6rem; }
-.likes {
-  position: absolute; z-index: 1;
-  inset-inline-end: .75rem; inset-block-end: .75rem;
-  display: flex; align-items: center; gap: .35rem;
-  padding: .4rem .7rem .4rem .55rem;
+.post .cap {
+  font-size: .86rem; font-weight: 600; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.post.textonly .cap { -webkit-line-clamp: 4; font-size: .95rem; }
+.post .media {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: .9rem;
+  background: #111 center / cover no-repeat;
+}
+.acts { display: flex; align-items: center; gap: 1.1rem; padding-inline-start: .1rem; }
+.act { display: inline-flex; align-items: center; gap: .35rem; font-size: .9rem; font-weight: 700; }
+.act svg, .pill-btn svg { inline-size: 1.45rem; block-size: 1.45rem; fill: none; stroke: #fff; stroke-width: 2; }
+.post.liked .act.like svg, .pill-btn.liked svg { fill: var(--heart); stroke: var(--heart); }
+.post.liked .act.like { color: var(--heart); }
+
+/* one post, opened */
+.bar { display: flex; justify-content: center; gap: .7rem; margin-block-end: .9rem; }
+.pill-btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .55rem 1.1rem .55rem .85rem;
   border-radius: 99px;
-  background: rgba(0, 0, 0, .55);
-  font-size: .95rem; font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, .22);
+  background: rgba(255, 255, 255, .1);
+  font-size: .9rem; font-weight: 800;
 }
-.likes svg { inline-size: 1.55rem; block-size: 1.55rem; fill: none; stroke: #fff; stroke-width: 2; }
-.post.liked .likes { background: rgba(255, 90, 110, .22); }
-.post.liked .likes svg { fill: var(--heart); stroke: var(--heart); }
+.pill-btn.liked { color: var(--heart); border-color: rgba(255, 90, 110, .55); background: rgba(255, 90, 110, .14); }
 @keyframes pop { 40% { transform: scale(1.35); } }
-.post.pop .likes svg { animation: pop .32s ease; }
-.post:focus-visible { outline-offset: 3px; }
+.pill-btn.pop svg { animation: pop .32s ease; }
+.post.open { inline-size: min(100%, calc(100vh - 9rem)); }
+.post.open .cap { -webkit-line-clamp: unset; }
+.replies-label { display: block; margin: 1.1rem 0 .55rem; }
+.reply {
+  display: grid; gap: .35rem;
+  padding: .7rem .85rem;
+  margin-block-end: .55rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: rgba(255, 255, 255, .06);
+}
+.reply:focus, .post.open:focus { outline: 3px solid #fff; outline-offset: 3px; }
+.reply p { margin: 0; font-size: .82rem; font-weight: 600; line-height: 1.35; }
 
 .caught-up { text-align: center; color: var(--muted); font-size: .65rem; font-weight: 600; margin-block-start: .4rem; }
 

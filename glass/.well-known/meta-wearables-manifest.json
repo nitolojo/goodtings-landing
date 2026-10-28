@@ -1,17 +1,22 @@
 {
   "version": 1,
   "name": "goodtings.",
-  "description": "collect the good. capture your daily tings, read your affirmation and manifest your BIG tings, right from your glasses.",
+  "description": "collect the good. your three daily tings and the pulse, right on your glasses.",
   "appearance": {
-    "theme_color": "#4AED80",
+    "theme_color": "#000000",
     "icon": {
       "src": "../assets/icon.svg",
       "type": "monochrome"
     },
     "icon_background": {
-      "colors": ["#1E1E22", "#0D0D0D"],
-      "stops": [0.0, 1.0],
-      "inner_glow_color": "#4AED80"
+      "colors": [
+        "#1A1A1A",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ]
     }
   }
 }
