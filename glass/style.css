@@ -392,6 +392,7 @@ html:focus, body:focus, .view:focus, .view:focus-visible { outline: none; }
 
 /* ---------- BIG ting picker ---------- */
 .choices { display: grid; gap: .45rem; }
+.choices[hidden] { display: none; }
 .choices .label { margin: .1rem .2rem; }
 .choice {
   text-align: start;
