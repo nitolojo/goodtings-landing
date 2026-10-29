@@ -404,11 +404,43 @@
     .glasses p strong { color: var(--ink); }
     .glasses .pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 99px;
       border: 1px solid rgba(74,237,128,.4); color: var(--green); font-size: 13px; font-weight: 800; letter-spacing: .04em; }
-    .lens { position: relative; aspect-ratio: 1; border-radius: 34px; overflow: hidden; background: #000;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 30px 90px rgba(0,0,0,.6), 0 0 120px rgba(74,237,128,.12); }
-    .lens img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .lens::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-      background: radial-gradient(120% 80% at 30% 0%, rgba(255,255,255,.09), transparent 55%); }
+    /* the peek: look through the glasses while the world slides by */
+    .peekwrap { position: relative; }
+    .peek { position: relative; aspect-ratio: 1; border-radius: 34px; overflow: hidden; background: #050505;
+      touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; outline: none;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 30px 90px rgba(0,0,0,.6), 0 0 120px rgba(74,237,128,.10); }
+    .peek.drag { cursor: grabbing; }
+    .peek:focus-visible { box-shadow: 0 0 0 2px var(--green), 0 30px 90px rgba(0,0,0,.6); }
+    .peek .stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; transform-origin: 0 0; }
+    .peek .pan { position: absolute; inset: 0; overflow: hidden; will-change: transform; }
+    .peek .pan img { position: absolute; top: 0; left: 0; width: 1400px; height: 1080px; max-width: none; will-change: transform; pointer-events: none; }
+    .peek .shade { position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, rgba(5,5,5,.42), rgba(5,5,5,0) 22%, rgba(5,5,5,0) 58%, rgba(5,5,5,.75) 80%, #050505 94%); }
+    .peek .rig { position: absolute; inset: 0; will-change: transform; transform-origin: 50% 64%; }
+    .peek .glass { position: absolute; left: -128px; top: -154px; width: 1080px; height: 1080px; transform: scale(1.185); transform-origin: 0 0;
+      -webkit-mask: url(glass-peek/lensmask.png) 0 0/1080px 1080px; mask: url(glass-peek/lensmask.png) 0 0/1080px 1080px; }
+    .peek .glass .ui { position: absolute; opacity: 0; will-change: opacity, transform; pointer-events: none; }
+    .peek .glass .ui img { display: block; width: 100%; height: auto; }
+    .peek .glass .ui .tick { position: absolute; inset: 0; opacity: 0; transition: opacity .25s ease; }
+    .peek .glass .ui .tick.on { opacity: 1; }
+    .peek .glint { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+      background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.10) 46%, rgba(74,237,128,.22) 50%, rgba(255,255,255,.08) 54%, transparent 62%);
+      background-size: 260% 100%; background-position: 120% 0; }
+    .peek .glint.go { animation: glint 1.1s cubic-bezier(.3,.7,.3,1) both; }
+    @keyframes glint { 0% { opacity: 0; background-position: 130% 0 } 20% { opacity: 1 } 100% { opacity: 0; background-position: -30% 0 } }
+    .peek .frame { position: absolute; left: -128px; top: -154px; width: 1280px; height: 1280px; max-width: none; pointer-events: none;
+      filter: brightness(.3) drop-shadow(0 18px 40px rgba(0,0,0,.45)); }
+    .peek-bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; }
+    .glasses .peek-cap { margin: 0; flex: 1; text-align: center; font-weight: 800; font-size: 19px; color: var(--ink); min-height: 1.4em; transition: opacity .25s ease, transform .25s ease; }
+    .peek-cap.swap { opacity: 0; transform: translateY(6px); }
+    .peek-cap .g { color: var(--green); } .peek-cap .p { color: #A98BFF; }
+    .peek-btn { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,.05);
+      color: var(--ink); display: grid; place-items: center; cursor: pointer; transition: background .2s, transform .2s; }
+    .peek-btn:hover { background: rgba(255,255,255,.1); } .peek-btn:active { transform: scale(.92); }
+    .peek-btn svg { width: 18px; height: 18px; }
+    .peek-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+    .peek-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 99px; background: rgba(255,255,255,.22); cursor: pointer; transition: width .3s ease, background .3s ease; }
+    .peek-dots button[aria-current="true"] { width: 22px; background: var(--green); }
     .get-glass { margin-top: 30px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
     .qr { width: 132px; height: 132px; padding: 10px; border-radius: 18px; background: #fff; flex: none; }
     .qr img { width: 100%; height: 100%; display: block; }
@@ -417,7 +449,7 @@
     #installGlass[hidden] { display: none; }
     @media (max-width: 860px) {
       .glasses-inner { grid-template-columns: 1fr; }
-      .lens { max-width: 440px; margin-inline: auto; width: 100%; }
+      .peekwrap { max-width: 480px; margin-inline: auto; width: 100%; }
     }
   </style>
 </head>
@@ -608,7 +640,24 @@
           </div>
           <a class="btn lg" id="installGlass" href="glass/" hidden style="margin-top:26px">add goodtings. to my glasses</a>
         </div>
-        <div class="lens"><img src="glass-preview.jpg" alt="goodtings. on Meta Ray-Ban Display: today’s three tings, the daily affirmation and the pulse" loading="lazy" /></div>
+        <div class="peekwrap">
+          <div class="peek" id="peek" tabindex="0" role="region" aria-roledescription="carousel" aria-label="look through the glasses: goodtings. on Meta Ray-Ban Display">
+            <div class="stage">
+              <div class="scenes"></div>
+              <div class="shade"></div>
+              <div class="rig">
+                <div class="glass"><div class="glint"></div></div>
+                <img class="frame" src="glass-peek/frame.webp" alt="" loading="lazy" />
+              </div>
+            </div>
+          </div>
+          <div class="peek-bar">
+            <button type="button" class="peek-btn" id="peekPrev" aria-label="previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <p class="peek-cap" id="peekCap" aria-live="polite"></p>
+            <button type="button" class="peek-btn" id="peekNext" aria-label="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+          <div class="peek-dots" id="peekDots"></div>
+        </div>
       </div>
     </section>
 
@@ -818,6 +867,133 @@
     rise(); addEventListener('scroll', rise, { passive: true });
   })();
   
+
+  // ── the peek: the frame stays put, the world slides behind it, the glass answers ──
+  (() => {
+    const peek = document.getElementById('peek'); if (!peek) return;
+    const P = 'glass-peek/';
+    const SCENES = [
+      { bg: 's-park',    ui: 'u-home',    at: [289, 336, 570], cap: 'glance at today’s <span class="g">three</span>.' },
+      { bg: 's-beach',   ui: 'u-capture', at: [284, 318, 560], cap: 'say it. <span class="g">saved</span>.' },
+      { bg: 's-metro',   ui: 'u-big',     at: [294, 312, 540], cap: 'some days are <span class="p">BIG</span>.' },
+      { bg: 's-street',  ui: 'u-pulse',   at: [354, 300, 450], cap: 'your squad’s <span class="g">good</span>.' },
+      { bg: 's-kitchen', ui: 'u-post',    at: [284, 296, 560], cap: 'love it. <span class="g">reply</span>.' },
+      { bg: 's-park2',   ui: 'u-aff0',    at: [264, 350, 600], cap: 'read it. <span class="g">tick</span> it.', ticks: true }
+    ];
+    const N = SCENES.length, W = 1080, PAR = 0.15;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stage = peek.querySelector('.stage'), scenesEl = peek.querySelector('.scenes'), glass = peek.querySelector('.glass'),
+          glint = peek.querySelector('.glint'), rig = peek.querySelector('.rig'), cap = document.getElementById('peekCap'), dotsEl = document.getElementById('peekDots');
+    const pans = [], uis = [], dots = []; let ticks = [];
+    SCENES.forEach((sc, i) => {
+      const pan = document.createElement('div'); pan.className = 'pan';
+      const img = new Image(); img.alt = ''; img.decoding = 'async'; img.loading = 'lazy'; img.src = P + sc.bg + '.jpg';
+      pan.appendChild(img); scenesEl.appendChild(pan); pans.push({ pan, img });
+      const ui = document.createElement('div'); ui.className = 'ui';
+      ui.style.cssText = `left:${sc.at[0]}px;top:${sc.at[1]}px;width:${sc.at[2]}px`;
+      ui.innerHTML = `<img src="${P + sc.ui}.webp" alt="" loading="lazy">` + (sc.ticks ? [1, 2, 3].map(k => `<img class="tick" src="${P}u-aff${k}.webp" alt="" loading="lazy">`).join('') : '');
+      glass.insertBefore(ui, glint); uis.push(ui);
+      if (sc.ticks) ticks = [...ui.querySelectorAll('.tick')];
+      const d = document.createElement('button'); d.type = 'button'; d.setAttribute('aria-label', 'scene ' + (i + 1));
+      d.addEventListener('click', () => { poke(); goTo(nearestLoop(i)); }); dotsEl.appendChild(d); dots.push(d);
+    });
+
+    // scale the 1080 stage to the box
+    const fit = () => { stage.style.transform = `scale(${peek.clientWidth / W})`; };
+    new ResizeObserver(fit).observe(peek); fit();
+
+    // motion state: pos in scenes (float, loops forever)
+    let pos = 0, target = 0, vel = 0, dragging = false, raf = 0, shown = -1, lastPoke = 0, tickTimers = [];
+    const wrap = d => ((d % N) + N + N / 2) % N - N / 2;           // signed distance on the loop
+    const idx = p => ((Math.round(p) % N) + N) % N;
+    const nearestLoop = i => target + wrap(i - target);
+
+    function render() {
+      for (let i = 0; i < N; i++) {
+        const d = wrap(i - pos);                                     // -N/2..N/2
+        const { pan, img } = pans[i];
+        if (Math.abs(d) > 1.2) { pan.style.visibility = 'hidden'; continue; }
+        pan.style.visibility = '';
+        pan.style.transform = `translate3d(${d * W}px,0,0)`;
+        img.style.transform = `translate3d(${-160 - d * PAR * W}px,0,0)`;   // the world drifts slower than you turn
+        const o = Math.max(0, 1 - Math.abs(d) * 2.4);
+        uis[i].style.opacity = o.toFixed(3);
+        uis[i].style.transform = `translate3d(${d * -60}px,${(1 - o) * 14}px,0) scale(${0.96 + o * 0.04})`;
+      }
+      // a little head-turn tilt while moving
+      const tilt = Math.max(-2.2, Math.min(2.2, vel * 22));
+      rig.style.transform = reduce ? '' : `rotate(${tilt}deg) translateX(${tilt * -3}px)`;
+    }
+    function settle() {
+      const i = idx(pos); if (i === shown) return; shown = i;
+      dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
+      cap.classList.add('swap');
+      setTimeout(() => { cap.innerHTML = SCENES[i].cap; cap.classList.remove('swap'); }, 180);
+      if (!reduce) { glint.classList.remove('go'); void glint.offsetWidth; glint.classList.add('go'); }
+      tickTimers.forEach(clearTimeout); ticks.forEach(t => t.classList.remove('on'));
+      if (SCENES[i].ticks) ticks.forEach((t, k) => tickTimers.push(setTimeout(() => t.classList.add('on'), 650 + k * 520)));
+    }
+    function loop() {
+      if (!dragging) {
+        const k = reduce ? 1 : 0.12;                                  // spring toward target
+        const prev = pos; pos += (target - pos) * k; vel = pos - prev;
+        if (Math.abs(target - pos) < 0.0008) { pos = target; vel = 0; }
+      }
+      render();
+      if (Math.abs(target - pos) < 0.02 && !dragging) settle();
+      raf = (dragging || pos !== target) ? requestAnimationFrame(loop) : 0;
+    }
+    const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
+    const goTo = t => { target = Math.round(t); kick(); };
+    const poke = () => { lastPoke = performance.now(); };
+
+    // drag / swipe
+    let sx = 0, sy = 0, sp = 0, lx = 0, lt = 0, v = 0, axis = null, pid = null;
+    peek.addEventListener('pointerdown', e => {
+      if (e.button) return; pid = e.pointerId; sx = lx = e.clientX; sy = e.clientY; sp = pos; lt = performance.now(); v = 0; axis = null; poke();
+    });
+    peek.addEventListener('pointermove', e => {
+      if (e.pointerId !== pid) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!axis) { if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return; axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'x') { dragging = true; peek.classList.add('drag'); peek.setPointerCapture(pid); } }
+      if (axis !== 'x') return;
+      const now = performance.now(), w = peek.clientWidth;
+      v = (e.clientX - lx) / Math.max(1, now - lt) / w * 16; lx = e.clientX; lt = now;
+      const prev = pos; pos = sp - dx / w; vel = pos - prev; target = pos; kick();
+    });
+    const up = e => {
+      if (e.pointerId !== pid) return; pid = null;
+      if (!dragging) return; dragging = false; peek.classList.remove('drag');
+      goTo(pos - v * 6);                                              // a flick carries you on
+    };
+    peek.addEventListener('pointerup', up); peek.addEventListener('pointercancel', up);
+    // horizontal trackpad swipes (leave vertical page scroll alone)
+    let wheelAcc = 0, wheelT = 0;
+    peek.addEventListener('wheel', e => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault(); poke();
+      const now = performance.now(); if (now - wheelT > 400) wheelAcc = 0; wheelT = now;
+      wheelAcc += e.deltaX;
+      if (Math.abs(wheelAcc) > 60) { goTo(target + Math.sign(wheelAcc)); wheelAcc = -Math.sign(wheelAcc) * 400; }
+    }, { passive: false });
+    peek.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); poke(); goTo(target + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); poke(); goTo(target - 1); }
+    });
+    document.getElementById('peekPrev').addEventListener('click', () => { poke(); goTo(target - 1); });
+    document.getElementById('peekNext').addEventListener('click', () => { poke(); goTo(target + 1); });
+
+    // drift along on its own while in view, pausing after you play with it
+    let inView = false;
+    new IntersectionObserver(es => { inView = es[0].isIntersecting; }, { threshold: 0.4 }).observe(peek);
+    if (!reduce) setInterval(() => {
+      if (inView && !dragging && document.visibilityState === 'visible' && performance.now() - lastPoke > 9000) goTo(target + 1);
+    }, 4200);
+
+    render(); settle();
+  })();
+
   // on the glasses themselves: offer a one-tap install
   (() => {
     const btn = document.getElementById('installGlass');
