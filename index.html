@@ -888,7 +888,7 @@
     const pans = [], uis = [], dots = []; let ticks = [];
     SCENES.forEach((sc, i) => {
       const pan = document.createElement('div'); pan.className = 'pan';
-      const img = new Image(); img.alt = ''; img.decoding = 'async'; img.loading = 'lazy'; img.src = P + sc.bg + '.jpg';
+      const img = new Image(); img.alt = ''; img.decoding = 'async'; img.loading = i < 2 ? 'eager' : 'lazy'; img.src = P + sc.bg + '.jpg';
       pan.appendChild(img); scenesEl.appendChild(pan); pans.push({ pan, img });
       const ui = document.createElement('div'); ui.className = 'ui';
       ui.style.cssText = `left:${sc.at[0]}px;top:${sc.at[1]}px;width:${sc.at[2]}px`;
