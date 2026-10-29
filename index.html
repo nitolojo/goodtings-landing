@@ -406,16 +406,17 @@
       border: 1px solid rgba(74,237,128,.4); color: var(--green); font-size: 13px; font-weight: 800; letter-spacing: .04em; }
     /* the peek: look through the glasses while the world slides by */
     .peekwrap { position: relative; }
-    .peek { position: relative; aspect-ratio: 1; border-radius: 34px; overflow: hidden; background: #050505;
+    .peek { position: relative; aspect-ratio: 1; border-radius: 34px; overflow: hidden; background: var(--bg); isolation: isolate;
       touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; outline: none;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 30px 90px rgba(0,0,0,.6), 0 0 120px rgba(74,237,128,.10); }
+      -webkit-mask: linear-gradient(#000 0 0); }
     .peek.drag { cursor: grabbing; }
-    .peek:focus-visible { box-shadow: 0 0 0 2px var(--green), 0 30px 90px rgba(0,0,0,.6); }
+    .peek:focus-visible { box-shadow: 0 0 0 2px var(--green); }
     .peek .stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; transform-origin: 0 0; }
-    .peek .pan { position: absolute; inset: 0; overflow: hidden; will-change: transform; }
+    .peek .pan { position: absolute; top: 0; bottom: 0; left: -1px; width: 1082px; overflow: hidden; will-change: transform; }
     .peek .pan img { position: absolute; top: 0; left: 0; width: 1400px; height: 1080px; max-width: none; will-change: transform; pointer-events: none; }
     .peek .shade { position: absolute; inset: 0; pointer-events: none;
-      background: linear-gradient(180deg, rgba(5,5,5,.42), rgba(5,5,5,0) 22%, rgba(5,5,5,0) 58%, rgba(5,5,5,.75) 80%, #050505 94%); }
+      background: linear-gradient(180deg, rgba(13,13,13,.45), rgba(13,13,13,0) 22%, rgba(13,13,13,0) 50%, rgba(13,13,13,.55) 64%, rgba(13,13,13,.9) 76%, #0D0D0D 86%),
+        linear-gradient(90deg, rgba(13,13,13,.5), rgba(13,13,13,0) 9%, rgba(13,13,13,0) 91%, rgba(13,13,13,.5)); }
     .peek .rig { position: absolute; inset: 0; will-change: transform; transform-origin: 50% 64%; }
     .peek .glass { position: absolute; left: -128px; top: -154px; width: 1080px; height: 1080px; transform: scale(1.185); transform-origin: 0 0;
       -webkit-mask: url(glass-peek/lensmask.png) 0 0/1080px 1080px; mask: url(glass-peek/lensmask.png) 0 0/1080px 1080px; }
@@ -430,7 +431,7 @@
     @keyframes glint { 0% { opacity: 0; background-position: 130% 0 } 20% { opacity: 1 } 100% { opacity: 0; background-position: -30% 0 } }
     .peek .frame { position: absolute; left: -128px; top: -154px; width: 1280px; height: 1280px; max-width: none; pointer-events: none;
       filter: brightness(.3) drop-shadow(0 18px 40px rgba(0,0,0,.45)); }
-    .peek-bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; }
+    .peek-bar { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: -11%; }
     .glasses .peek-cap { margin: 0; flex: 1; text-align: center; font-weight: 800; font-size: 19px; color: var(--ink); min-height: 1.4em; transition: opacity .25s ease, transform .25s ease; }
     .peek-cap.swap { opacity: 0; transform: translateY(6px); }
     .peek-cap .g { color: var(--green); } .peek-cap .p { color: #A98BFF; }
@@ -899,7 +900,7 @@
     });
 
     // scale the 1080 stage to the box
-    const fit = () => { stage.style.transform = `scale(${peek.clientWidth / W})`; };
+    const fit = () => { stage.style.transform = `scale(${(peek.getBoundingClientRect().width + 1) / W}) translate(-.5px,0)`; };
     new ResizeObserver(fit).observe(peek); fit();
 
     // motion state: pos in scenes (float, loops forever)
@@ -912,7 +913,7 @@
       for (let i = 0; i < N; i++) {
         const d = wrap(i - pos);                                     // -N/2..N/2
         const { pan, img } = pans[i];
-        if (Math.abs(d) > 1.2) { pan.style.visibility = 'hidden'; continue; }
+        if (Math.abs(d) > 0.997) { pan.style.visibility = 'hidden'; uis[i].style.opacity = 0; continue; }
         pan.style.visibility = '';
         pan.style.transform = `translate3d(${d * W}px,0,0)`;
         img.style.transform = `translate3d(${-160 - d * PAR * W}px,0,0)`;   // the world drifts slower than you turn
