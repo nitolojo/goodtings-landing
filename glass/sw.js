@@ -1,5 +1,5 @@
 // goodtings. glasses: offline app shell + photo cache (Meta "Storage and offline support").
-const VERSION = '20261031175650';
+const VERSION = '10311759';
 const SHELL = `gt-shell-${VERSION}`;
 const PHOTOS = 'gt-photos-v1';
 const SHELL_FILES = [
@@ -36,11 +36,11 @@ self.addEventListener('fetch', e => {
     const isStatic = /\/assets\//.test(url.pathname);
     e.respondWith(caches.open(SHELL).then(async c => {
       const hit = await c.match(req, { ignoreSearch: true });
-      const fresh = fetch(req).then(res => { if (res.ok) c.put(req, res.clone()); return res; });
+      const fresh = fetch(req, { cache: isStatic ? 'default' : 'no-cache' }).then(res => { if (res.ok) c.put(req, res.clone()); return res; });
       // fonts/icons: cache first. app code: newest version, unless the network is slow or gone
       if (isStatic && hit) { fresh.catch(() => {}); return hit; }
       if (!hit) return fresh;
-      const slow = new Promise(r => setTimeout(() => r(hit), 1500));
+      const slow = new Promise(r => setTimeout(() => r(hit), 4000));
       return Promise.race([fresh.catch(() => hit), slow]);
     }));
     return;

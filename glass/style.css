@@ -405,3 +405,5 @@ html:focus, body:focus, .view:focus, .view:focus-visible { outline: none; }
 .choice[aria-pressed="true"] { background: rgba(139, 92, 246, .3); border-color: var(--purple-light); }
 .choice[aria-pressed="true"]::before { content: "✓ "; color: var(--purple-light); }
 .choice:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+.quiet .ver { display: block; margin-top: 4px; font-size: 11px; opacity: .45; letter-spacing: .04em; }
