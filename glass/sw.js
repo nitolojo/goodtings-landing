@@ -1,5 +1,5 @@
 // goodtings. glasses: offline app shell + photo cache (Meta "Storage and offline support").
-const VERSION = '20261028181541';
+const VERSION = '20261031175650';
 const SHELL = `gt-shell-${VERSION}`;
 const PHOTOS = 'gt-photos-v1';
 const SHELL_FILES = [
