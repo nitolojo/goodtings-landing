@@ -84,7 +84,7 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
       backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
     }
-    .nav-logo { height: 30px; width: auto; transition: opacity .4s var(--ease), transform .4s var(--ease); }
+    .nav-logo { display: block; height: 22px; width: auto; transition: opacity .4s var(--ease), transform .4s var(--ease); }
     .nav:not(.scrolled) .nav-logo { opacity: 0; transform: translateY(6px); }
     .nav-links { display: flex; gap: 4px; font-size: 14px; font-weight: 600; }
     .nav-links a { padding: 8px 14px; border-radius: 999px; color: var(--muted); transition: color .2s, background .2s; }
@@ -383,7 +383,7 @@
       }
     @media (max-width: 520px) {
       .nav { padding-left: 16px; }
-      .nav-logo { height: 26px; }
+      .nav-logo { height: 21px; }
       .rec { padding: 20px; border-radius: 26px; }
       .foot { flex-direction: column; text-align: center; }
       .ticker span { font-size: 15px; }
@@ -456,7 +456,7 @@
 </head>
 <body>
   <nav class="nav" aria-label="main">
-    <a href="#top" aria-label="goodtings. home"><img src="gootings-logo-header-white.svg" alt="goodtings." class="nav-logo" /></a>
+    <a href="#top" aria-label="goodtings. home"><img src="nav-logo.svg" alt="goodtings." class="nav-logo" /></a>
     <div class="nav-links">
       <a href="#how">how it works</a>
       <a href="#try">big tings</a>
