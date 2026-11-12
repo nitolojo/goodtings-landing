@@ -17,6 +17,7 @@
   --purple-light: #B79CFF;
   --heart: #FF4D5E;
   --postit: #FFE873;
+  --purple: #A86CF0;
   --r: 1rem;
   --gutter: 1.6rem;
 }
@@ -410,7 +411,8 @@ html:focus, body:focus, .view:focus, .view:focus-visible { outline: none; }
   display: grid; gap: .55rem;
 }
 .affirm .label-row { margin: 0; }
-.affirm.done { background: rgba(74, 237, 128, .1); box-shadow: inset 0 1px 0 rgba(74, 237, 128, .5), inset 0 0 0 1px rgba(74, 237, 128, .35); }
+.affirm.done { background: rgba(168, 108, 240, .14); box-shadow: inset 0 1px 0 rgba(190, 140, 255, .55), inset 0 0 0 1px rgba(168, 108, 240, .4); }
+.affirm .count.full { color: var(--purple); }
 .affirm-text { margin: 0; font-size: .92rem; font-weight: 700; line-height: 1.3; }
 .affirm-row { display: flex; gap: .6rem; align-items: center; }
 .tick {
@@ -421,8 +423,8 @@ html:focus, body:focus, .view:focus, .view:focus-visible { outline: none; }
   display: grid; place-items: center;
   transition: transform .18s ease, background-color .18s;
 }
-.tick svg { inline-size: 1.1rem; block-size: 1.1rem; fill: none; stroke: #000; stroke-width: 3.2; opacity: 0; }
-.tick.on { background: var(--green); border-color: var(--green); box-shadow: 0 0 .8rem rgba(74, 237, 128, .45); }
+.tick svg { inline-size: 1.1rem; block-size: 1.1rem; fill: none; stroke: #fff; stroke-width: 3.2; opacity: 0; }
+.tick.on { background: var(--purple); border-color: var(--purple); box-shadow: 0 0 .8rem rgba(168, 108, 240, .5); }
 .tick.on svg { opacity: 1; }
 .tick.listen { margin-inline-start: auto; border-color: rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .08); }
 .tick.listen svg { opacity: 1; stroke: #fff; stroke-width: 2; fill: none; inline-size: 1.2rem; block-size: 1.2rem; }
