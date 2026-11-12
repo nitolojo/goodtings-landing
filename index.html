@@ -878,7 +878,7 @@
       { bg: 's-beach',   ui: 'u-capture', at: [284, 318, 560], cap: 'say it. <span class="g">saved</span>.' },
       { bg: 's-metro',   ui: 'u-big',     at: [294, 312, 540], cap: 'some days are <span class="p">BIG</span>.' },
       { bg: 's-street',  ui: 'u-pulse',   at: [354, 300, 450], cap: 'your squad’s <span class="g">good</span>.' },
-      { bg: 's-kitchen', ui: 'u-post',    at: [284, 296, 560], cap: 'love it. <span class="g">reply</span>.' },
+      { bg: 's-kitchen', ui: 'u-post',    at: [284, 296, 560], cap: 'love it. leave a <span class="g">note</span>.' },
       { bg: 's-park2',   ui: 'u-aff0',    at: [264, 350, 600], cap: 'read it. <span class="g">tick</span> it.', ticks: true }
     ];
     const N = SCENES.length, W = 1080, PAR = 0.15;
@@ -892,7 +892,7 @@
       pan.appendChild(img); scenesEl.appendChild(pan); pans.push({ pan, img });
       const ui = document.createElement('div'); ui.className = 'ui';
       ui.style.cssText = `left:${sc.at[0]}px;top:${sc.at[1]}px;width:${sc.at[2]}px`;
-      ui.innerHTML = `<img src="${P + sc.ui}.webp" alt="" loading="lazy">` + (sc.ticks ? [1, 2, 3].map(k => `<img class="tick" src="${P}u-aff${k}.webp" alt="" loading="lazy">`).join('') : '');
+      ui.innerHTML = `<img src="${P + sc.ui}.webp?v=1112" alt="" loading="lazy">` + (sc.ticks ? [1, 2, 3].map(k => `<img class="tick" src="${P}u-aff${k}.webp?v=1112" alt="" loading="lazy">`).join('') : '');
       glass.insertBefore(ui, glint); uis.push(ui);
       if (sc.ticks) ticks = [...ui.querySelectorAll('.tick')];
       const d = document.createElement('button'); d.type = 'button'; d.setAttribute('aria-label', 'scene ' + (i + 1));
